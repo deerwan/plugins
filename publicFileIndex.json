@@ -44,28 +44,6 @@
     "id": "t4wcibkvdb6vxQ02ifP2hkA8gWg=",
     "isChatPlugin": false
   },
-  "urczqfqXNrvru6XCDszdmeccU6s=": {
-    "type": "github",
-    "name": "IP变化通知",
-    "author": "IP变化通知",
-    "team": "小寒寒-小九九二改",
-    "version": "1.0.2",
-    "description": "IP变化通知，变化后自动执行代理“更换白名单”命令，多线路的请勿使用，增加更换dynv6 ddns功能",
-    "classification": [
-      "Server"
-    ],
-    "filename": "IP变化通知.js",
-    "fileDir": "/plugins/Deer/IP变化通知.js",
-    "systemVersionRange": "",
-    "isCron": false,
-    "isAdapter": false,
-    "isMod": false,
-    "isService": false,
-    "isAuthentication": false,
-    "isEncPlugin": false,
-    "id": "urczqfqXNrvru6XCDszdmeccU6s=",
-    "isChatPlugin": true
-  },
   "JpCxK8zkestDOfB8u8N8/DWOZmI=": {
     "type": "github",
     "name": "更换rabbitpro反代",
