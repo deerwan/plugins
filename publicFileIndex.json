@@ -43,27 +43,5 @@
     "isEncPlugin": false,
     "id": "t4wcibkvdb6vxQ02ifP2hkA8gWg=",
     "isChatPlugin": false
-  },
-  "JpCxK8zkestDOfB8u8N8/DWOZmI=": {
-    "type": "github",
-    "name": "更换rabbitpro反代",
-    "author": "更换rabbitpro反代",
-    "team": "小九九/Deer",
-    "version": "1.0",
-    "description": "检查反代列表，更换可用的rabbitpro反代",
-    "classification": [
-      "Server"
-    ],
-    "filename": "更换rabbitpro反代.js",
-    "fileDir": "/plugins/Deer/更换rabbitpro反代.js",
-    "systemVersionRange": "",
-    "isCron": false,
-    "isAdapter": false,
-    "isMod": false,
-    "isService": false,
-    "isAuthentication": false,
-    "isEncPlugin": false,
-    "id": "JpCxK8zkestDOfB8u8N8/DWOZmI=",
-    "isChatPlugin": true
   }
 }
