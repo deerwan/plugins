@@ -3,13 +3,29 @@
  * @name 更换rabbitpro反代
  * @origin 小九九
  * @team 小九九
- * @version 1.0
+ * @version 1.0.2
  * @rule ^crbfd$
  * @description 检查反代列表，更换可用的rabbitpro反代
  * @admin true
  * @public false
  * @priority 1000
  */
+
+    /*
+    命令解释：
+    crbfd: （管理员）更换兔子反代，可配合定时任务自动运行，可自定义触发命令，修改
+    * @rule ^crbfd$
+    例如：
+    * @rule ^更换兔子反代$
+    多个 | 分割
+    例如：
+    * @rule ^crbfd|更换兔子反代$
+    更新日志：
+    1.0.2
+    增加更换反代推送管理员选项，单个或多个，而不是所有管理员
+
+
+    */
 
 const jsonSchema = BncrCreateSchema.object({
     rabbit: BncrCreateSchema.object({
@@ -29,6 +45,14 @@ const jsonSchema = BncrCreateSchema.object({
             "log.madrabbit.eu.org",
             "fd.gp.mba:6379",
         ]),
+    admins: BncrCreateSchema.array(BncrCreateSchema.string().setTitle("管理员").setDescription(`要接收通知的管理员QQ号或其他平台ID`).setDefault(""))
+        .setTitle("接收通知的管理员")
+        .setDescription(`点击右下角+增加更多管理员，留空则推送给所有管理员`)
+        .setDefault([]),
+    platforms: BncrCreateSchema.array(BncrCreateSchema.string().setTitle("平台").setDescription(`要推送通知的平台，如qq、telegram等`).setDefault(""))
+        .setTitle("推送平台")
+        .setDescription(`点击右下角+增加更多平台，留空则推送到所有平台`)
+        .setDefault([]),
 });
 const ConfigDB = new BncrPluginConfig(jsonSchema);
 
@@ -74,18 +98,12 @@ module.exports = async (s) => {
                     })
                     .catch((error) => {
                         console.log(error);
-                        sysMethod.pushAdmin({
-                            platform: [],
-                            msg: "连接rabbitpro后台失败",
-                        });
+                        pushAdminMessage("连接rabbitpro后台失败");
                     });
                 if (!result) {
                     return;
                 } else if (result.code == 401) {
-                    sysMethod.pushAdmin({
-                        platform: [],
-                        msg: "更换rabbitpro反代auth：" + result.msg,
-                    });
+                    pushAdminMessage("更换rabbitpro反代auth：" + result.msg);
                     return;
                 }
                 return result.access_token;
@@ -123,16 +141,10 @@ module.exports = async (s) => {
                     })
                     .catch();
                 if (result?.code == 0) {
-                    sysMethod.pushAdmin({
-                        platform: [],
-                        msg: "更换rabbitpro反代：" + result.msg + "\n现在使用的是：" + config.ServerHost,
-                    });
+                    pushAdminMessage("更换rabbitpro反代：" + result.msg + "\n现在使用的是：" + config.ServerHost);
                     return;
                 } else {
-                    sysMethod.pushAdmin({
-                        platform: [],
-                        msg: "更换rabbitpro反代：保存设置失败",
-                    });
+                    pushAdminMessage("更换rabbitpro反代：保存设置失败");
                 }
                 return;
             }
@@ -208,15 +220,24 @@ module.exports = async (s) => {
                 return url;
             }
         } catch (err) {
-            sysMethod.pushAdmin({
-                platform: [],
-                msg: "更换rabbitpro反代err：" + err,
-            });
+            pushAdminMessage("更换rabbitpro反代err：" + err);
             await sysMethod.sleep(5);
             global.crbfd_lock = false;
             throw err;
         }
     } else {
         console.log("更换rabbitpro反代：另一个自动更换反代正在运行中");
+    }
+    
+    // 辅助函数定义在模块级别
+    function pushAdminMessage(message) {
+        const platforms = ConfigDB.userConfig.platforms || [];
+        const admins = ConfigDB.userConfig.admins || [];
+        
+        sysMethod.pushAdmin({
+            platform: platforms.length > 0 ? platforms : [],
+            admin: admins.length > 0 ? admins : [],
+            msg: message,
+        });
     }
 };
